@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="qua.ico">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            overflow: hidden;
+        }
+        #canvasArea {
+            margin: 0 auto;
+            overflow: hidden;
+        }
+    </style>
+    <!-- Facebook Instant Games SDK -->
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
+    <!-- Add any other external libraries/scripts here -->
+    <!-- GDJS libraries and scripts -->
+</head>
+<body>
+    <!-- Your game's content goes here -->
+    <div id="canvasArea"></div>
+    <script>
+        (function() {
+            // Initialization
+            var game = new gdjs.RuntimeGame(gdjs.projectData, {});
+
+            // Create a renderer
+            game.getRenderer().createStandardCanvas(document.getElementById('canvasArea'));
+
+            // Bind keyboards/mouse/touch events
+            game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+
+            // Load all assets and start the game
+            game.loadAllAssets(function() {
+                game.startGameLoop();
+            });
+        })();
+    </script>
+
+    <!-- Facebook SDK Initialization -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '1399621280913188', // Substitua pelo seu App ID do Facebook
+                cookie: true,
+                xfbml: true,
+                version: 'Versao us-En 18.0' // Substitua pela versão desejada (por exemplo, 'v18.0')
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <!-- Botão de Login do Facebook -->
+    <div id="fb-login-button">
+        <button onclick="loginWithFacebook()">Login with Facebook</button>
+    </div>
+
+    <script>
+        function loginWithFacebook() {
+            FB.login(function(response) {
+                if (response.status === 'connected') {
+                    // O usuário está conectado ao Facebook, faça o que for necessário com as informações do usuário.
+                    var accessToken = response.authResponse.accessToken;
+                    var userID = response.authResponse.userID;
+                } else if (response.status === 'not_authorized') {
+                    // O usuário está logado no Facebook, mas não autorizou o seu aplicativo.
+                    // Você pode solicitar ao usuário que autorize novamente.
+                } else {
+                    // O usuário não está logado no Facebook. Você pode mostrar uma mensagem de erro ou um botão de login alternativo.
+                }
+            }, { scope: 'public_profile,email' });
+        }
+    </script>
+</body>
+</html>
